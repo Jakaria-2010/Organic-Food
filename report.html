@@ -65,48 +65,7 @@ button:hover{
 
 </div>
 
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBz_JBO0uQ0bE_sqdLtupEKHMnlWt-4Nmw",
-  authDomain: "organic-food-market-da267.firebaseapp.com",
-  projectId: "organic-food-market-da267"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-window.sendReport = async function(){
-
-    let name = document.getElementById("name").value.trim();
-    let problem = document.getElementById("problem").value.trim();
-    let message = document.getElementById("message").value.trim();
-
-    if(!name || !problem || !message){
-        alert("❌ Please fill all fields!");
-        return;
-    }
-
-    let btn = document.querySelector("button");
-    btn.innerText = "Sending...";
-    btn.disabled = true;
-
-    await addDoc(collection(db,"reports"),{
-        name,
-        problem,
-        message,
-        createdAt: new Date().toISOString()
-    });
-
-    alert("🚨 Report sent successfully!");
-
-    window.location.href = "index.html";
-};
-
-</script>
+<script type="module" src="js/report.js"></script>
 
 </body>
 </html>
