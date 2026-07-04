@@ -128,21 +128,30 @@ document.getElementById("totalPrice").innerText = total;
 <!-- ================= FIREBASE ================= -->
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+// Firebase App
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 
+// Firestore
+import { getFirestore } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+// Firebase Configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBz_JBO0uQ0bE_sqdLtupEKHMnlWt-4Nmw",
-  authDomain: "organic-food-market-da267.firebaseapp.com",
-  projectId: "organic-food-market-da267",
-  storageBucket: "organic-food-market-da267.firebasestorage.app",
-  messagingSenderId: "1074047510883",
-  appId: "1:1074047510883:web:92ae862f008c5ed0ea0b56"
+  apiKey: "AIzaSyD9NoaOrtABI63unHmcDHMpK6Kwv4KfqHI",
+  authDomain: "organic-food-jakaria.firebaseapp.com",
+  projectId: "organic-food-jakaria",
+  storageBucket: "organic-food-jakaria.firebasestorage.app",
+  messagingSenderId: "283724929228",
+  appId: "1:283724929228:web:9693d5a5bcc7d41a1d4a69"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// Initialize Firestore
 const db = getFirestore(app);
 
+// Export
+export { db };
 // ⭐ ONLY ONE placeOrder FUNCTION (IMPORTANT)
 window.placeOrder = async function(){
 
