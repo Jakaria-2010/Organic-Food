@@ -1,164 +1,93 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Admin Panel</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body{
-    font-family: Arial;
-    background:#f4f4f4;
-    margin:0;
-    padding:20px;
-}
-
-.header{
-    background:#2e7d32;
-    color:white;
-    padding:15px;
-    text-align:center;
-    font-size:22px;
-    font-weight:bold;
-}
-
-.tabs{
-    display:flex;
-    gap:10px;
-    margin:15px 0;
-    flex-wrap:wrap;
-}
-
-.tab-btn{
-    padding:10px 15px;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-    background:#ddd;
-}
-
-.tab-btn.active{
-    background:#2e7d32;
-    color:white;
-}
-
-.card{
-    background:white;
-    padding:15px;
-    margin-bottom:10px;
-    border-radius:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
-}
-
-.small{
-    font-size:14px;
-    color:#555;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f5f5;
+            margin: 0;
+        }
+        
+        header {
+            background: #2e7d32;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .container {
+            padding: 20px;
+        }
+    </style>
 </head>
 
 <body>
-
-<div class="header">🛒 Admin Dashboard</div>
-
-<div class="tabs">
-<button class="tab-btn active" onclick="showTab('orders')">Orders</button>
-<button class="tab-btn" onclick="showTab('contacts')">Contact Us</button>
-<button class="tab-btn" onclick="showTab('reports')">Reports</button>
-</div>
-
-<div id="content"></div>
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBz_JBO0uQ0bE_sqdLtupEKHMnlWt-4Nmw",
-  authDomain: "organic-food-market-da267.firebaseapp.com",
-  projectId: "organic-food-market-da267",
-  storageBucket: "organic-food-market-da267.firebasestorage.app",
-  messagingSenderId: "1074047510883",
-  appId: "1:1074047510883:web:92ae862f008c5ed0ea0b56"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-let currentTab = "orders";
-
-window.showTab = async function(tab){
-    currentTab = tab;
-
-    document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
-    event.target.classList.add("active");
-
-    if(tab === "orders") loadOrders();
-    if(tab === "contacts") loadContacts();
-    if(tab === "reports") loadReports();
-}
-
-// ---------------- ORDERS ----------------
-async function loadOrders(){
-    let snap = await getDocs(collection(db,"orders"));
-    let html = "<h2>📦 Orders</h2>";
-
-    snap.forEach(d=>{
-        let o = d.data();
-        html += `
-        <div class="card">
-            <b>${o.name}</b><br>
-            📞 ${o.phone}<br>
-            🏠 ${o.address}<br>
-            💰 ৳${o.total}<br>
-            Status: ${o.status}
-        </div>`;
-    });
-
-    document.getElementById("content").innerHTML = html;
-}
-
-// ---------------- CONTACT ----------------
-async function loadContacts(){
-    let snap = await getDocs(collection(db,"contacts"));
-    let html = "<h2>📩 Contact Messages</h2>";
-
-    snap.forEach(d=>{
-        let c = d.data();
-        html += `
-        <div class="card">
-            <b>${c.name}</b><br>
-            📞 ${c.phone}<br>
-            💬 ${c.message}
-        </div>`;
-    });
-
-    document.getElementById("content").innerHTML = html;
-}
-
-// ---------------- REPORTS ----------------
-async function loadReports(){
-    let snap = await getDocs(collection(db,"reports"));
-    let html = "<h2>🚨 Reports</h2>";
-
-    snap.forEach(d=>{
-        let r = d.data();
-        html += `
-        <div class="card">
-            <b>${r.name}</b><br>
-            ⚠️ ${r.problem}<br>
-            💬 ${r.message}
-        </div>`;
-    });
-
-    document.getElementById("content").innerHTML = html;
-}
-
-// default load
-loadOrders();
-
-</script>
-
+    
+    <header>
+        <h2>Organic Food Admin</h2>
+        
+        <button onclick="logout()">Logout</button>
+    </header>
+    
+    <div class="container">
+        
+        <h3>Dashboard</h3>
+        
+        <p>✅ Login successful.</p>
+        
+        <p>The real dashboard will be added next.</p>
+        
+    </div>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+        
+        import {
+            getAuth,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+        
+        const firebaseConfig = {
+            apiKey:"AIzaSyD9NoaOrtABI63unHmcDHMpK6Kwv4KfqHI",
+            authDomain: "organic-food-jakaria.firebaseapp.com",
+            projectId: "organic-food-jakaria",
+            storageBucket: "organic-food-jakaria.firebasestorage.app",
+            messagingSenderId: "283724929228",
+            appId: "1:283724929228:web:9693d5a5bcc7d41a1d4a69"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        
+        // Protect admin page
+        onAuthStateChanged(auth, user => {
+            if (!user) {
+                window.location.href = "login.html";
+            }
+        });
+        
+        // Logout
+        window.logout = async function() {
+            await signOut(auth);
+            window.location.href = "login.html";
+        };
+    </script>
+    
 </body>
+
 </html>
