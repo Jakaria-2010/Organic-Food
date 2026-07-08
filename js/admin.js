@@ -1,11 +1,15 @@
 import { protectAdmin } from "./auth.js";
 import { setNotificationCount } from "./ui.js";
 
-// Protect the admin page
-protectAdmin();
+import { loadOrders } from "./orders.js";
+import { loadReports } from "./reports.js";
 
-// Hide notification badge at startup
-setNotificationCount(0);
-
-// Orders, reports and dashboard modules
-// will be added here in the next steps.
+protectAdmin(() => {
+  
+  setNotificationCount(0);
+  
+  loadOrders();
+  
+  loadReports();
+  
+});
