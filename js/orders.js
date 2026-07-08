@@ -1,3 +1,4 @@
+let allOrders = [];
 import { db } from "./firebase.js";
 
 import {
@@ -42,7 +43,16 @@ function loadOrders() {
       
       return;
     }
-    
+    allOrders = [];
+
+snapshot.forEach((doc) => {
+  
+  allOrders.push({
+    id: doc.id,
+    ...doc.data()
+  });
+  
+});
     snapshot.forEach((doc) => {
       
       const order = doc.data();
@@ -87,7 +97,9 @@ ${order.status}
 
 <td>
 
-<button class="actionBtn">
+<button
+class="actionBtn"
+onclick="viewOrder('${doc.id}')">
 
 👁 View
 
@@ -104,9 +116,284 @@ ${order.status}
     totalOrders.textContent = total;
     pendingOrders.textContent = pending;
     deliveredOrders.textContent = delivered;
-    
+    displayOrders(allOrders);
   });
   
 }
 
 export { loadOrders };
+import {
+  getDoc,
+  doc,
+  updateDoc,
+  deleteDoc
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+window.viewOrder = async function(id) {
+  
+  const snap = await getDoc(doc(db, "orders", id));
+  
+  if (!snap.exists()) return;
+  
+  const order = snap.data();
+  
+  const modal = document.getElementById("orderModal");
+  
+  const body = document.getElementById("modalBody");
+  
+  let itemsHTML = "";
+  
+  order.items.forEach(item => {
+    
+    itemsHTML += `
+<div class="itemRow">
+
+<span>${item.name}</span>
+
+<span>৳${item.price}</span>
+
+</div>
+`;
+    
+  });
+  
+  body.innerHTML = `
+  
+<h3
+style="color:#2e7d32;cursor:pointer;"
+onclick="navigator.clipboard.writeText('${order.orderId}');
+alert('Order ID Copied!');">
+
+📦 ${order.orderId}
+
+</h3>
+
+<p><b>Customer:</b> ${order.customerName}</p>
+
+<p><b>Phone:</b> ${order.phone}</p>
+
+<p><b>Address:</b><br>${order.address}</p>
+
+<hr>
+
+<h3>Items</h3>
+
+${itemsHTML}
+
+<hr>
+
+<h3>Total : ৳${order.total}</h3>
+
+<p><b>Status</b></p>
+
+<select id="statusSelect">
+
+<option value="Pending"
+${order.status=="Pending"?"selected":""}>
+Pending
+</option>
+
+<option value="Accepted"
+${order.status=="Accepted"?"selected":""}>
+Accepted
+</option>
+
+<option value="Preparing"
+${order.status=="Preparing"?"selected":""}>
+Preparing
+</option>
+
+<option value="Out for Delivery"
+${order.status=="Out for Delivery"?"selected":""}>
+Out for Delivery
+</option>
+
+<option value="Delivered"
+${order.status=="Delivered"?"selected":""}>
+Delivered
+</option>
+
+<option value="Cancelled"
+${order.status=="Cancelled"?"selected":""}>
+Cancelled
+</option>
+
+</select>
+
+<br><br>
+
+<button
+class="saveBtn"
+onclick="updateStatus('${id}')">
+
+💾 Save Status
+
+</button>
+
+`;
+  
+  modal.style.display = "flex";
+  
+};
+
+document.getElementById("closeModal").onclick = function() {
+  
+  document.getElementById("orderModal").style.display = "none";
+  
+};
+
+window.onclick = function(e) {
+  
+  const modal = document.getElementById("orderModal");
+  
+  if (e.target === modal) {
+    
+    modal.style.display = "none";
+    
+  }
+  
+};
+window.updateStatus = async function(id) {
+  
+  const status =
+    document.getElementById("statusSelect").value;
+  
+  await updateDoc(
+    doc(db, "orders", id),
+    {
+      status: status
+    }
+  );
+  
+  alert("✅ Status Updated!");
+  
+  document.getElementById("orderModal").style.display = "none";
+  
+}
+function displayOrders(orders) {
+  
+  const table = document.getElementById("ordersTable");
+  
+  table.innerHTML = "";
+  
+  if (orders.length === 0) {
+    
+    table.innerHTML = `
+<tr>
+<td colspan="7">
+No matching orders.
+</td>
+</tr>
+`;
+    
+    return;
+    
+  }
+  
+  orders.forEach(order => {
+    
+    let date = "";
+    
+    if (order.createdAt) {
+      
+      date = order.createdAt.toDate().toLocaleString();
+      
+    }
+    
+    table.innerHTML += `
+
+<tr>
+
+<td>
+<b>${order.orderId}</b>
+</td>
+
+<td>${order.customerName}</td>
+
+<td>${order.phone}</td>
+
+<td>৳${order.total}</td>
+<td>
+
+<span class="status ${order.status.toLowerCase()}">
+
+${order.status}
+
+</span>
+
+</td>
+
+<td>${date}</td>
+<td>
+
+<button
+class="actionBtn"
+onclick="viewOrder('${order.id}')">
+
+👁 View
+
+</button>
+
+<button
+class="deleteBtn"
+onclick="deleteOrder('${order.id}')">
+
+🗑 Delete
+
+</button>
+
+</td>
+
+</td>
+
+`;
+    
+  });
+  
+}
+document
+  .getElementById("searchBox")
+  .addEventListener("input", function() {
+    
+    const text = this.value.toLowerCase();
+    
+    const filtered = allOrders.filter(order => {
+      
+      return (
+        
+        order.customerName.toLowerCase().includes(text)
+        
+        ||
+        
+        order.phone.includes(text)
+        
+      );
+      
+    });
+    
+    displayOrders(filtered);
+    
+  });
+  window.deleteOrder = async function(id) {
+  
+  const ok = confirm(
+    "Delete this order permanently?"
+  );
+  
+  if (!ok) return;
+  
+  try {
+    
+    await deleteDoc(
+      doc(db, "orders", id)
+    );
+    
+    alert("✅ Order deleted!");
+    
+  } catch (err) {
+    
+    alert(err.message);
+    
+  }
+  
+}

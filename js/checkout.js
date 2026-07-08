@@ -48,9 +48,29 @@ window.placeOrder = async function() {
   }
   
   try {
-    
+    function generateOrderId() {
+  
+  const now = new Date();
+  
+  const date =
+    now.getFullYear().toString() +
+    String(now.getMonth() + 1).padStart(2, "0") +
+    String(now.getDate()).padStart(2, "0");
+  
+  const time =
+    String(now.getHours()).padStart(2, "0") +
+    String(now.getMinutes()).padStart(2, "0") +
+    String(now.getSeconds()).padStart(2, "0");
+  
+  const ms =
+    String(now.getMilliseconds()).padStart(3, "0");
+  
+  return `OF-${date}-${time}-${ms}`;
+  
+}
+const orderId = generateOrderId();
     await addDoc(collection(db, "orders"), {
-      
+      orderId: orderId,
       customerName: name,
       phone: phone,
       address: address,
@@ -69,7 +89,17 @@ window.placeOrder = async function() {
     
     localStorage.removeItem("cart");
     
-    alert("Order placed successfully!");
+    alert(
+  
+  `✅ Order Placed Successfully!
+
+Order ID:
+
+${orderId}
+
+Please save this Order ID.`
+  
+);
     
     window.location.href = "index.html";
     
