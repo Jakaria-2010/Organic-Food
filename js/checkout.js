@@ -89,17 +89,9 @@ const orderId = generateOrderId();
     
     localStorage.removeItem("cart");
     
-    alert(
-  
-  `✅ Order Placed Successfully!
+    document.getElementById("successOrderId").textContent = orderId;
 
-Order ID:
-
-${orderId}
-
-Please save this Order ID.`
-  
-);
+document.getElementById("successModal").style.display = "flex";
     
     window.location.href = "index.html";
     
