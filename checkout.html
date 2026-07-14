@@ -211,61 +211,49 @@ Place Order
 <a href="index.html">← Back</a>
 
 </div>
-<script type="module" src="js/checkout.js"></script>
-document.getElementById("copyBtn").onclick=function(){
 
-const id=document.getElementById("successOrderId").textContent;
-
-navigator.clipboard.writeText(id);
-
-this.innerHTML="✅ Copied";
-
-setTimeout(()=>{
-
-this.innerHTML="📋";
-
-},2000);
-
-};
 <!-- ================= ORDER SUCCESS MODAL ================= -->
 
 <div id="successModal" class="successModal">
-    
+
     <div class="successBox">
-        
+
         <h2>✅ Order Placed Successfully!</h2>
-        
+
         <p>Your Order ID</p>
-        
+
         <div class="orderIdBox">
-            
+
             <span id="successOrderId"></span>
-            
-            <button id="copyBtn">
-                📋
-            </button>
-            
+
+           <button id="copyBtn" class="order-btn">
+    📋 Copy Order ID
+</button>
+
         </div>
-        
+
         <p class="note">
-            
-            Please save this Order ID.
+
+            Please save this Order ID.<br>
             You will need it to track your order.
-            
+
         </p>
-        
+
         <div class="successButtons">
-            
+
             <button id="homeBtn">
-            
+
                 🏠 Back to Home
-                
+
             </button>
-            
+
         </div>
-        
+
     </div>
-    
+
 </div>
+
+<script type="module" src="js/checkout.js"></script>
+
 </body>
 </html>
