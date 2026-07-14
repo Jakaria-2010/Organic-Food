@@ -5,171 +5,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body{
-    font-family: Arial;
-    background: #f5f5f5;
-    padding: 30px;
-}
-
-.box{
-    background: white;
-    max-width: 500px;
-    margin: auto;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-h2{
-    color: #2e7d32;
-    text-align: center;
-}
-
-.cart-item{
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-}
-
-.input-box{
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-.method{
-    border: 1px solid #ddd;
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 5px;
-}
-
-.order-btn{
-    background: #2e7d32;
-    color: white;
-    border: none;
-    padding: 12px;
-    width: 100%;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.order-btn:hover{
-    background: #1b5e20;
-}
-/* ================= SUCCESS MODAL ================= */
-
-.successModal {
-    
-    display: none;
-    
-    position: fixed;
-    
-    left: 0;
-    top: 0;
-    
-    width: 100%;
-    height: 100%;
-    
-    background: rgba(0, 0, 0, .5);
-    
-    justify-content: center;
-    align-items: center;
-    
-    z-index: 9999;
-    
-}
-
-.successBox {
-    
-    background: white;
-    
-    width: 90%;
-    max-width: 420px;
-    
-    padding: 25px;
-    
-    border-radius: 15px;
-    
-    text-align: center;
-    
-    animation: pop .3s;
-    
-}
-
-@keyframes pop {
-    
-    from {
-        
-        transform: scale(.8);
-        
-        opacity: 0;
-        
-    }
-    
-    to {
-        
-        transform: scale(1);
-        
-        opacity: 1;
-        
-    }
-    
-}
-
-.orderIdBox {
-    
-    display: flex;
-    
-    justify-content: space-between;
-    
-    align-items: center;
-    
-    border: 2px solid #2e7d32;
-    
-    border-radius: 10px;
-    
-    padding: 10px;
-    
-    margin: 20px 0;
-    
-    font-size: 18px;
-    
-    font-weight: bold;
-    
-    background: #f1fff1;
-    
-}
-
-#copyBtn {
-    
-    width: auto;
-    
-    padding: 8px 12px;
-    
-    cursor: pointer;
-    
-}
-
-.note {
-    
-    color: #666;
-    
-    margin-bottom: 20px;
-    
-}
-
-.successButtons button {
-    
-    width: 100%;
-    
-}
-</style>
+<link rel="stylesheet" href="css/checkout.css">
 </head>
 
 <body>
@@ -212,44 +48,69 @@ Place Order
 
 </div>
 
-<!-- ================= ORDER SUCCESS MODAL ================= -->
+<!-- ================= SUCCESS MODAL ================= -->
 
 <div id="successModal" class="successModal">
 
-    <div class="successBox">
+<div class="successBox">
 
-        <h2>✅ Order Placed Successfully!</h2>
+<div class="successIcon">
+✅
+</div>
 
-        <p>Your Order ID</p>
+<h2>Order Confirmed!</h2>
 
-        <div class="orderIdBox">
+<p class="thankYou">
+Thank you for shopping with us.
+</p>
 
-            <span id="successOrderId"></span>
+<hr>
 
-           <button id="copyBtn" class="order-btn">
-    📋 Copy Order ID
+<h3>Order ID</h3>
+
+<div class="orderIdBox">
+
+<span id="successOrderId"></span>
+
+<button id="copyBtn">
+📋 Copy
 </button>
 
-        </div>
+</div>
 
-        <p class="note">
+<div class="summary">
 
-            Please save this Order ID.<br>
-            You will need it to track your order.
+<p><b>Customer:</b>
+<span id="successCustomer"></span></p>
 
-        </p>
+<p><b>Total:</b>
+৳<span id="successTotal"></span></p>
 
-        <div class="successButtons">
+<p><b>Status:</b>
 
-            <button id="homeBtn">
+<span class="pendingStatus">
 
-                🏠 Back to Home
+🟡 Pending
 
-            </button>
+</span>
 
-        </div>
+</p>
 
-    </div>
+</div>
+
+<div class="successButtons">
+
+<button id="receiptBtn">
+📄 Download Receipt
+</button>
+
+<button id="homeBtn">
+🏠 Back to Home
+</button>
+
+</div>
+
+</div>
 
 </div>
 

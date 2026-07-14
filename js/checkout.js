@@ -68,13 +68,15 @@ const orderId = generateOrderId();
       
     });
     
-    document.getElementById("successOrderId").textContent = orderId;
+   document.getElementById("successOrderId").textContent = orderId;
+ 
+   document.getElementById("successCustomer").textContent = name;
 
-document.getElementById("successModal").style.display = "flex";
-    
-  }
-  
-  catch (error) {
+   document.getElementById("successTotal").textContent = total;
+
+   document.getElementById("successModal").style.display = "flex";
+ }
+    catch (error) {
     
     alert(error.message);
     
