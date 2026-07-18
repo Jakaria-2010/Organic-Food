@@ -11,24 +11,19 @@ function protectAdmin(callback) {
   onAuthStateChanged(auth, (user) => {
     
     if (!user) {
-      
       window.location.href = "login.html";
       return;
-      
     }
     
-    // Show email
     document.getElementById("adminEmail").textContent = user.email;
     
-    // Avatar
     const letter = user.email.charAt(0).toUpperCase();
     
     document.getElementById("avatar").textContent = letter;
     document.getElementById("bigAvatar").textContent = letter;
     
-    // Run other modules after login
     if (callback) {
-      callback(user);
+      callback();
     }
     
   });

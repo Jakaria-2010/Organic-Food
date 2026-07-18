@@ -7,7 +7,23 @@ import {
   orderBy,
   onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-
+let sortDirection = "desc";
+function sortOrders() {
+  
+  allOrders.sort((a, b) => {
+    
+    const timeA = a.createdAt?.seconds ?? 0;
+    const timeB = b.createdAt?.seconds ?? 0;
+    
+    return sortDirection === "desc" ?
+      timeB - timeA :
+      timeA - timeB;
+    
+  });
+  
+  displayOrders(allOrders);
+  
+}
 function loadOrders() {
   
   const table = document.getElementById("ordersTable");
@@ -20,29 +36,37 @@ function loadOrders() {
     collection(db, "orders"),
     orderBy("createdAt", "desc")
   );
+onSnapshot(
+  q,
+  (snapshot) => {
+    
+table.innerHTML = "";
+
+let total = 0;
+let pending = 0;
+let delivered = 0;
+
+if (snapshot.empty) {
   
-  onSnapshot(q, (snapshot) => {
-    
-    table.innerHTML = "";
-    
-    let total = 0;
-    let pending = 0;
-    let delivered = 0;
-    
-    if (snapshot.empty) {
-      
-      table.innerHTML = `
+  table.innerHTML = `
                 <tr>
                     <td colspan="6">No orders found.</td>
                 </tr>
             `;
-      
-      totalOrders.textContent = "0";
-      pendingOrders.textContent = "0";
-      deliveredOrders.textContent = "0";
-      
-      return;
-    }
+  
+  totalOrders.textContent = "0";
+  pendingOrders.textContent = "0";
+  deliveredOrders.textContent = "0";
+  
+  return;
+    
+}
+  (error) => {
+    console.error("Firestore Error:", error);
+    alert(error.message);
+  }
+);
+  
     allOrders = [];
 
 snapshot.forEach((doc) => {
@@ -116,8 +140,8 @@ onclick="viewOrder('${doc.id}')">
     totalOrders.textContent = total;
     pendingOrders.textContent = pending;
     deliveredOrders.textContent = delivered;
-    displayOrders(allOrders);
-  });
+    sortOrders();
+};
   
 }
 
@@ -344,7 +368,7 @@ onclick="deleteOrder('${order.id}')">
 
 </td>
 
-</td>
+
 
 `;
     
@@ -361,11 +385,11 @@ document
       
       return (
         
-        order.customerName.toLowerCase().includes(text)
+        (order.customerName || "").toLowerCase().includes(text)
         
         ||
         
-        order.phone.includes(text)
+        (order.phone || "").includes(text)
         
       );
       
@@ -397,3 +421,12 @@ document
   }
   
 }
+document.getElementById("sortOrder")
+  .addEventListener("change", function() {
+    
+    sortDirection = this.value;
+    
+    sortOrders();
+    
+    
+  });
